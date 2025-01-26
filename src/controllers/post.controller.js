@@ -46,9 +46,6 @@ export const getPost = async (req, res) => {
       .limit(20) // Limit to 20 posts for pagination
       .populate("_id", "name googleId profilePic");
 
-    if (!posts.length) {
-      return res.status(404).json({ message: "No posts found" });
-    }
 
     res.status(200).json({
       message: "Post fetched successfully",
