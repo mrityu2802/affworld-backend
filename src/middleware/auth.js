@@ -28,6 +28,19 @@ export const authMiddleware = async (req, res, next) => {
     }
   } catch (error) {
     console.log("Error in auth middleware", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    let errorMessage = "Token verification failed";
+    if (error.errorInfo?.code === "auth/argument-error") {
+      errorMessage = "Inavlid token credentials!";
+    } else if (error.errorInfo?.code === "auth/id-token-expired") {
+      errorMessage = "User Session Expired";
+    } else {
+      next(error);
+    }
+
+    return res.status(401).json({
+      status: false,
+      message: errorMessage,
+      data: {},
+    });
   }
 };
