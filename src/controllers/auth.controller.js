@@ -115,6 +115,7 @@ export const googleLogin = async (req, res) => {
       if (user) {
         res.status(201).json({
           message: "User authenticated successfully",
+          user: user,
         });
       } else {
         let user = null;
@@ -124,6 +125,13 @@ export const googleLogin = async (req, res) => {
             email: payload.email,
             name: payload.name,
             profilePic: payload.picture,
+          });
+
+          await user.save();
+
+          res.status(201).json({
+            message: "User authenticated successfully",
+            user: user,
           });
         }
       }
